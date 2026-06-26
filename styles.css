@@ -957,6 +957,52 @@ figcaption { font-size: .92rem; color: var(--muted); margin-top: .65rem; line-he
 .voices-cta p { color: var(--muted); max-width: 52ch; margin: 0 auto 1.2rem; }
 
 /* ============================================================
+   Gallery lightbox + suppress image hover / visual-search tools
+   ============================================================ */
+.gallery figure { position: relative; }
+.gallery figure img { pointer-events: none; }
+.gallery figure::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.zoomable { cursor: zoom-in; }
+.zoomable:focus-visible { outline: 3px solid var(--sky); outline-offset: 4px; border-radius: 6px; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 1000;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(8,11,15,.93);
+  padding: clamp(1rem, 4vw, 3rem);
+}
+.lightbox.open { display: flex; }
+/* hide the backdrop-filter header while the modal is open (it otherwise composites over the overlay) */
+body.lightbox-open .site-header { visibility: hidden; }
+.lb-figure {
+  margin: 0; max-width: min(1100px, 92vw);
+  display: flex; flex-direction: column; align-items: center;
+}
+.lb-img {
+  max-width: 100%; max-height: 80vh; width: auto; height: auto;
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.55);
+  pointer-events: none;
+}
+.lb-cap { color: #e3e9ee; font-size: .95rem; line-height: 1.45; margin-top: 1rem; text-align: center; max-width: 70ch; }
+.lb-close, .lb-nav {
+  position: absolute; z-index: 2;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.25); border-radius: 50%;
+  cursor: pointer; line-height: 1; padding: 0;
+  transition: background .15s ease, transform .15s ease;
+}
+.lb-close:hover, .lb-nav:hover { background: rgba(255,255,255,.26); }
+.lb-close { top: clamp(.6rem,2vw,1.2rem); right: clamp(.6rem,2vw,1.2rem); width: 46px; height: 46px; font-size: 1.8rem; }
+.lb-nav { top: 50%; transform: translateY(-50%); width: 50px; height: 50px; font-size: 2rem; }
+.lb-nav:hover { transform: translateY(-50%) scale(1.06); }
+.lb-prev { left: clamp(.5rem,2vw,1.5rem); }
+.lb-next { right: clamp(.5rem,2vw,1.5rem); }
+.lb-close:focus-visible, .lb-nav:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+@media (max-width: 600px) { .lb-nav { width: 42px; height: 42px; font-size: 1.65rem; } }
+
+/* ============================================================
    Responsive
    ============================================================ */
 @media (max-width: 860px) {
